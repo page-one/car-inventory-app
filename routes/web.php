@@ -3,6 +3,8 @@
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +53,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/admin/users/{user}/reset-password', [CarController::class, 'resetUserPassword'])->name('admin.users.reset-password');
         Route::post('/admin/users/{user}/toggle-status', [CarController::class, 'toggleUserStatus'])->name('admin.users.toggle-status');
     });
-});
+
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->middleware('guest')
+        ->name('password.email');
+        
+    });
 
 require __DIR__.'/auth.php';
